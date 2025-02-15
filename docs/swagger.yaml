@@ -1,0 +1,159 @@
+basePath: /
+definitions:
+  models.Order:
+    properties:
+      address:
+        type: string
+      delivery_time:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      items:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+    type: object
+host: localhost:8383
+info:
+  contact: {}
+  description: API for managing food delivery orders
+  title: WeServeFood Delivery Order Management API
+  version: "1.0"
+paths:
+  /cancel-order/{email}/{id}:
+    delete:
+      description: Cancel an order by order ID and email
+      parameters:
+      - description: User Email
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Order Cancelled Successfully
+          schema:
+            type: string
+      summary: Cancel an order
+  /get-all-orders:
+    get:
+      description: Retrieve all active orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Order'
+              type: array
+            type: array
+        "404":
+          description: No active orders found
+          schema:
+            type: string
+      summary: Get all orders
+  /get-order:
+    get:
+      description: Retrieve all orders for a given email
+      parameters:
+      - description: User Email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+        "404":
+          description: Order not found
+          schema:
+            type: string
+      summary: Get user orders
+  /ping:
+    get:
+      description: Check server availability
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Hello From the Server!!
+          schema:
+            type: string
+      summary: Ping Server
+  /place-order:
+    post:
+      consumes:
+      - application/json
+      description: Create a new food order
+      parameters:
+      - description: Order Details
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Order Details
+          schema:
+            $ref: '#/definitions/models.Order'
+        "400":
+          description: Invalid Request Payload
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Place an order
+  /update-address/{email}/{id}:
+    put:
+      description: Update the delivery address for an order
+      parameters:
+      - description: User Email
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New Address
+        in: query
+        name: new_address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+        "400":
+          description: unable to update new address
+          schema:
+            type: string
+      summary: Update address
+swagger: "2.0"
