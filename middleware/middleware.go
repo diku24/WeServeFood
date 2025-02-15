@@ -10,7 +10,7 @@ import (
 // LoggingMiddleware logs the incoming requests
 func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		log.Printf("%s - %s %s %s", req.Method, req.RequestURI, req.Host, req.RemoteAddr)
+		log.Printf("%s - %s %s %s", req.Method, req.Host, req.RequestURI, req.RemoteAddr)
 		next.ServeHTTP(rw, req)
 	})
 }
